@@ -24,13 +24,8 @@ object QInterpolatorSpec extends Properties("QInterpolatorSpec") {
             genRandomVariableLengthStringWithBlankSpaces(r)
         )
 
-        val chars = ('a' to 'z').toList
-        def genSimpleStrings: Gen[String] = Gen.oneOf(
-            for i <- 1 to 10 yield StringUtils.randomStringFromCharList(i, chars)
-            // // randomStringFromCharList
-            // StringUtils.randomAlphaString(5),
-            // StringUtils.randomAlphaString(10)
-            // // StringUtils.randomAlphaString(5)
+        def genAlphaStringsLength0To10: Gen[String] = Gen.oneOf(
+            for len <- 0 to 10 yield StringUtils.randomAlphanumericString(len)
         )
 
         /**
@@ -59,7 +54,7 @@ object QInterpolatorSpec extends Properties("QInterpolatorSpec") {
     // property("Q: basic") = forAll(GenString.genNonEmptyString) { (s: String) =>
     // property("Q: basic") = forAll(Gen.asciiPrintableStr) { (s: String) =>
     // property("Q: basic") = forAll { (s: String) =>
-    property("Q: basic") = forAll(GenString.genSimpleStrings) { (s: String) =>
+    property("Q: basic") = forAll(GenString.genAlphaStringsLength0To10) { (s: String) =>
         val rez = Q"""$s"""
         // ===== START DEBUG =====
         System.err.println(s"[$count] String = \"${s}\""); count = count + 1
@@ -67,7 +62,6 @@ object QInterpolatorSpec extends Properties("QInterpolatorSpec") {
         System.err.println("------------------------")
         // ===== STOP DEBUG =====
         if s.trim == "" then
-            // TODO this is probably not reached with a simple string generator
             rez == List()
         else
             // these things should be true for any single non-empty string
