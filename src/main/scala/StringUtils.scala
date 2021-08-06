@@ -21,6 +21,7 @@ object StringUtils {
      */
     def truncate(s: String, length: Int): String = s.take(length)
 
+
     /**
      * Returns a string that is the same as the input string, but
      * truncated to the specified length, with three dots shown
@@ -100,10 +101,10 @@ object StringUtils {
      * @param replaceWith The string you want to use as the replacement. Can be an empty string,
      * asterisk, etc., anything you want to use as the replacement pattern.
      */
-    def replaceAll(s: String, regex: String, replaceWith: String): String = {
+    def replaceAll(s: String, regex: String, replaceWith: String): String =
         val r = regex.r
         r.replaceAllIn(s, replaceWith)
-    }
+
 
     /**
       * Returns true if the string is null or empty. An “empty” string may contain
@@ -148,11 +149,11 @@ object StringUtils {
       * @param t Any type of throwable.
       * @return A string representation of the throwable’s stack trace.
       */
-    def getStackTraceAsString(t: Throwable): String = {
+    def getStackTraceAsString(t: Throwable): String =
         val sw = new StringWriter
         t.printStackTrace(new PrintWriter(sw))
         sw.toString
-    }
+
 
     /**
       * Splits a CamelCase string into words such as splitting
@@ -161,7 +162,7 @@ object StringUtils {
       * @param s A non-null, CamelCase string.
       * @return A camel-case string separated into words, like "Foo Bar Baz".
       */
-    def splitCamelCase(s: String): String = {
+    def splitCamelCase(s: String): String =
         return s.replaceAll(
             String.format(
                 "%s|%s|%s",
@@ -171,7 +172,7 @@ object StringUtils {
             ),
             " "
             ).replaceAll("  ", " ")
-    }
+
 
     /**
       * Generates a random-length string of _printable_ characters
@@ -182,7 +183,7 @@ object StringUtils {
       * @param r
       * @return
       */
-    def genRandomVariableLengthStringWithBlankSpaces(r: scala.util.Random): String = {
+    def genRandomVariableLengthStringWithBlankSpaces(r: scala.util.Random): String =
         val ab = ArrayBuffer[Char]()
         val maxLength = r.nextInt(100) + 50  //range of 50-149
         for i <- 1 to maxLength do
@@ -193,11 +194,10 @@ object StringUtils {
         end for
         val charSeq: mutable.Seq[Char] = Random.shuffle(ab)
         charSeq.mkString + "\n"
-    }
+
 
     /**
-      * Generates a random alphanumeric string using `Random.alphanumeric` of the length
-      * specified.
+      * Generates a random alphanumeric string of the desired length.
       * @param length The desired length of the string.
       */
     def randomAlphanumericString(length: Int): String = 
@@ -212,13 +212,13 @@ object StringUtils {
       * @param length The desired length of the string.
       */
     //TODO test
-    def randomAlphaString(length: Int): String = {
+    def randomAlphaString(length: Int): String =
         val chars = ('a' to 'z') ++ ('A' to 'Z')
         randomStringFromCharList(length, chars)
-    }
+
 
     //TODO test
-    def randomStringFromCharList(length: Int, chars: Seq[Char]): String = {
+    def randomStringFromCharList(length: Int, chars: Seq[Char]): String =
         val sb = StringBuilder()
         for i <- 1 to length do
             val randomNum = util.Random.nextInt(chars.length)
@@ -226,7 +226,7 @@ object StringUtils {
             // println(s"randomChar = $randomChar")  // debugging
             sb.append(randomChar)
         sb.toString
-    }
+
 
     /**
       * "foo\nbar\nbaz" becomes `Seq("foo", "bar", "baz")`.
