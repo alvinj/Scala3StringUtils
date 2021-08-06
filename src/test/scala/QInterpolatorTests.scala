@@ -5,13 +5,42 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class QInterpolatorTests extends AnyFunSuite:
 
+    test("`Q`: empty strings return empty lists") {
+        val emptySeq = Seq[String]()
+
+        // single-line
+        var list = Q"";   assert(list == emptySeq)
+        list = Q"  ";     assert(list == emptySeq)
+
+        // multi-line
+        list = Q"""
+               """
+        assert(list == emptySeq)
+
+        list = Q"""
+
+               """
+        assert(list == emptySeq)
+    }
+
     test("`Q` works on one-item list") {
         var list = Q"bar"
         assert(list == Vector("bar"))
 
+        list = Q"""foo"""
+        assert(list == Vector("foo"))
+
         list = Q"""
                 foo
             """
+        assert(list == Vector("foo"))
+
+        list = Q"""foo
+            """
+        assert(list == Vector("foo"))
+
+        list = Q"""
+            foo"""
         assert(list == Vector("foo"))
     }
 
@@ -33,25 +62,6 @@ class QInterpolatorTests extends AnyFunSuite:
                 cherries
             """
         assert(list == Vector("apples", "bananas", "cherries"))
-    }
-
-    test("`Q`: empty string returns empty list") {
-        val emptyVector = Vector[String]()
-
-        var list = Q"";     assert(list == emptyVector)
-        list = Q"  ";       assert(list == emptyVector)
-
-        list = Q"""
-               """
-        assert(list == emptyVector)
-
-        list = Q"""
-
-               """
-        assert(list == emptyVector)
-
-        // TODO handle this?
-        //list = Q" \n\r\t";  assert(list == emptyVector)
     }
 
     test("`Q` works on multiline string with multi-words per line") {

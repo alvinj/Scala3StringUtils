@@ -48,6 +48,7 @@ object QInterpolatorSpec extends Properties("QInterpolatorSpec") {
         val asciiPrintableStr = Gen.asciiPrintableStr
         val simpleString: Gen[String] = Gen.asciiPrintableStr.suchThat(i => !i.isEmpty)
 
+        val genStringList = Gen.containerOf[List,String](Gen.alphaStr)
     }
 
     var count = 0
@@ -55,7 +56,7 @@ object QInterpolatorSpec extends Properties("QInterpolatorSpec") {
     // property("Q: basic") = forAll(GenString.genNonEmptyString) { (s: String) =>
     // property("Q: basic") = forAll(Gen.asciiPrintableStr) { (s: String) =>
     // property("Q: basic") = forAll { (s: String) =>
-    property("Q: basic") = forAll(GenString.genAlphaStringsLength0To10) { (s: String) =>
+    property("Q: test one-item string") = forAll(GenString.genAlphaStringsLength0To10) { (s: String) =>
         val rez = Q"""$s"""
         // // ===== START DEBUG =====
         // System.err.println(s"[$count] String = \"${s}\""); count = count + 1
@@ -63,7 +64,7 @@ object QInterpolatorSpec extends Properties("QInterpolatorSpec") {
         // System.err.println("------------------------")
         // // ===== STOP DEBUG =====
         if s.trim == "" then
-            rez == List()
+            rez == Seq()
         else
             // these things should be true for any single non-empty string
             // rez.length == 1 && rez.head == s.trim
@@ -71,7 +72,14 @@ object QInterpolatorSpec extends Properties("QInterpolatorSpec") {
         end if
     }
 
-    //TODO the main use case, multiline strings
+    // the main use case
+    property("Q: test multiline strings") = forAll(GenString.genStringList) { (xs: List[String]) =>
+        val listOfNonEmptyStrings = xs.filter(_.trim != "")
+        val multiLineString = listOfNonEmptyStrings.mkString("\n")
+        val rez = Q"$multiLineString"
+        rez.size == listOfNonEmptyStrings.size
+    }
+
     //TODO test non-ascii characters (i.e., any ISO character)
 
 }
