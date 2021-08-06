@@ -7,8 +7,7 @@ libraryDependencies ++= Seq(
     "org.scalatest" %% "scalatest" % "latest.integration" % "test",
     "org.scalacheck" %% "scalacheck" % "1.15.4"
     // "org.scalactic" %% "scalactic" % "3.2.9",
-    // "org.scalatest" %% "scalatest" % "3.2.9" % "test",
-    // "org.scalacheck" %% "scalacheck" % "1.15.4"
+    // "org.scalatest" %% "scalatest" % "3.2.9" % "test"
 )
 
 // see https://tpolecat.github.io/2017/04/25/scalac-flags.html for scalacOptions descriptions
