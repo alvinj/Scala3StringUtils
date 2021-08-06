@@ -217,11 +217,14 @@ object StringUtils {
         randomStringFromCharList(length, chars)
     }
 
-    private def randomStringFromCharList(length: Int, chars: Seq[Char]): String = {
-        val sb = new StringBuilder
+    //TODO test
+    def randomStringFromCharList(length: Int, chars: Seq[Char]): String = {
+        val sb = StringBuilder()
         for i <- 1 to length do
             val randomNum = util.Random.nextInt(chars.length)
-            sb.append(chars(randomNum))
+            val randomChar = chars(randomNum)
+            // println(s"randomChar = $randomChar")  // debugging
+            sb.append(randomChar)
         sb.toString
     }
 
