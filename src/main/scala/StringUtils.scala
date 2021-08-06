@@ -7,7 +7,7 @@ import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
-object StringUtils {
+object StringUtils:
 
     /**
      * Returns a string that is the same as the input string, but
@@ -132,7 +132,7 @@ object StringUtils {
       * spaces. It does not currently work with characters like \n, \r, and \t.
       *
       * Example: `foo bar baz` returns `Foo Bar Baz`.
-      * TODO: Doesn’t properly work with a string like "How " that ends in a blank.
+      * @note TODO, more testing is needed. Doesn’t properly work with a string like "How " that ends in a blank.
       */
     def capitalizeAllWordsInString(s: String): String = s.split(" ").map(_.capitalize).mkString(" ")
 
@@ -159,6 +159,7 @@ object StringUtils {
       * Splits a CamelCase string into words such as splitting
       * "FooBarBaz" into "Foo Bar Baz".
       *
+      * @note TODO, more testing is needed.
       * @param s A non-null, CamelCase string.
       * @return A camel-case string separated into words, like "Foo Bar Baz".
       */
@@ -178,7 +179,7 @@ object StringUtils {
       * Generates a random-length string of _printable_ characters
       * (Random.nextPrintableChar), with about 20% of them being blank spaces.
       *
-      * TODO let the caller specify the values that are currently hard-coded.
+      * @note TODO: let the caller specify the values that are currently hard-coded.
       *
       * @param r
       * @return
@@ -191,6 +192,7 @@ object StringUtils {
                 ab.append(' ')
             else
                 ab.append(r.nextPrintableChar)
+            end if
         end for
         val charSeq: mutable.Seq[Char] = Random.shuffle(ab)
         charSeq.mkString + "\n"
@@ -268,11 +270,16 @@ object StringUtils {
 //    }
 
     /**
-      * Removes the trailing 's' from a string. Technically all it does right now is
-      * drop the last character from the string. What I probably need are `pluralize`
-      * and `dePluralize` functions.
+      * Removes the trailing 's' from a string. What I probably need is a 
+      * `dePluralize` function.
       */
-    def removeTrailingS(s: String): String = s.dropRight(1)
+    def removeTrailingS(s: String): String = 
+        if s.length == 0 then
+            s
+        else if s.last == 's' then 
+            s.dropRight(1)
+        else
+            s
 
     /**
      * Converts a boolean to a "y" (true) or "n" (false).
@@ -299,5 +306,5 @@ object StringUtils {
             default
         end if
 
-}
+end StringUtils
 

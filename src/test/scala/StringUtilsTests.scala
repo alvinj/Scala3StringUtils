@@ -343,6 +343,7 @@ class StringUtilsTests extends AnyFunSuite {
     /**
       * leftTrim
       * --------
+      * also: see the property tests for `leftTrim` and `rightTrim`
       */
     test("`leftTrim`: empty string returns itself") {
         var result = ""
@@ -356,19 +357,20 @@ class StringUtilsTests extends AnyFunSuite {
         result = leftTrim("   ");  assert(result == "")
     }
 
-    // also: see the property tests for `leftTrim` and `rightTrim`
     test("`leftTrim`: trims blanks on left") {
         var result = ""
-        result = leftTrim(" abc");   assert(result == "abc")
-        result = leftTrim("  abc");  assert(result == "abc")
-        result = leftTrim("  123");  assert(result == "123")
+        result = leftTrim(" abc");     assert(result == "abc")
+        result = leftTrim("  abc");    assert(result == "abc")
+        result = leftTrim("  123");    assert(result == "123")
+        result = leftTrim("  a b c");  assert(result == "a b c")
     }
 
     test("`leftTrim`: leaves blanks on right alone") {
         var result = ""
-        result = leftTrim(" abc ");   assert(result == "abc ")
-        result = leftTrim("  abc  ");  assert(result == "abc  ")
-        result = leftTrim("  123  ");  assert(result == "123  ")
+        result = leftTrim(" abc ");      assert(result == "abc ")
+        result = leftTrim("  abc  ");    assert(result == "abc  ")
+        result = leftTrim("  123  ");    assert(result == "123  ")
+        result = leftTrim("  a b c  ");  assert(result == "a b c  ")
     }
 
     test("`leftTrim`: handle `\\n` in string") (pending)
@@ -395,16 +397,18 @@ class StringUtilsTests extends AnyFunSuite {
 
     test("`rightTrim`: handles blanks on right") {
         var result = ""
-        result = rightTrim("abc ");  assert(result == "abc")
-        result = rightTrim("abc  ");  assert(result == "abc")
-        result = rightTrim("---  ");  assert(result == "---")
+        result = rightTrim("abc ");     assert(result == "abc")
+        result = rightTrim("abc  ");    assert(result == "abc")
+        result = rightTrim("---  ");    assert(result == "---")
+        result = rightTrim("a b c  ");  assert(result == "a b c")
     }
 
     test("`rightTrim`: leaves blanks on left alone") {
         var result = ""
-        result = rightTrim(" abc ");   assert(result == " abc")
-        result = rightTrim("  abc  ");  assert(result == "  abc")
-        result = rightTrim("  123  ");  assert(result == "  123")
+        result = rightTrim(" abc ");      assert(result == " abc")
+        result = rightTrim("  abc  ");    assert(result == "  abc")
+        result = rightTrim("  123  ");    assert(result == "  123")
+        result = rightTrim("  a b c  ");  assert(result == "  a b c")
     }
 
     // also: see the property tests for `leftTrim` and `rightTrim`
@@ -471,6 +475,7 @@ class StringUtilsTests extends AnyFunSuite {
       * ---------------------
       */
     test("getStackTraceAsString: handles basic throwable") {
+        // basic
         var t = new Throwable("foo bar baz")
         var s = getStackTraceAsString(t)
         assert(s.startsWith("java.lang.Throwable: foo bar baz"))
@@ -587,10 +592,19 @@ class StringUtilsTests extends AnyFunSuite {
         var res = ""
         res = removeTrailingS("dollars");  assert(res == "dollar")
         res = removeTrailingS("cases");    assert(res == "case")
+        res = removeTrailingS("foos");     assert(res == "foo")
+        res = removeTrailingS("bass");     assert(res == "bas")
+
+        // no 's' at the end
+        res = removeTrailingS("case");    assert(res == "case")
+        res = removeTrailingS("");    assert(res == "")
     }
 
-    // TODO more tests needed
-    test("removeTrailingS on 'case'") (pending)   // "case" as input fails; should return "case"
+    test("removeTrailingS: blank strings") {
+        var res = ""
+        res = removeTrailingS("");    assert(res == "")
+        res = removeTrailingS(" ");   assert(res == " ")
+    }
 
 
 
@@ -604,7 +618,20 @@ class StringUtilsTests extends AnyFunSuite {
         res = randomAlphanumericString(2);  assert(res.length == 2)
         res = randomAlphanumericString(5);  assert(res.length == 5)
     }
+    test("randomAlphanumericString: test characters in the string") (pending)
 
+
+    /**
+      * genRandomVariableLengthStringWithBlankSpaces
+      * --------------------------------------------
+      */
+    test("genRandomVariableLengthStringWithBlankSpaces: confirm length > 0") {
+        //TODO replace this with ScalaCheck
+        for i <- 1 to 500 do
+            val r = scala.util.Random
+            var res = genRandomVariableLengthStringWithBlankSpaces(r)
+            assert(res.length > 0)
+    }
     test("genRandomVariableLengthStringWithBlankSpaces tests") (pending)
 
 

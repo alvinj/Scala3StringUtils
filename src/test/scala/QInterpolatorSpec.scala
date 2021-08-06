@@ -13,6 +13,7 @@ object QInterpolatorSpec extends Properties("QInterpolatorSpec") {
 
     // see https://www.scala-exercises.org/scalacheck/generators
     // see https://booksites.artima.com/scalacheck/examples/html/ch06.html
+    // see https://alvinalexander.com/scala/scalacheck-custom-generator-examples
     object GenString {
 
         val r = new scala.util.Random
@@ -29,8 +30,8 @@ object QInterpolatorSpec extends Properties("QInterpolatorSpec") {
         )
 
         /**
-          * Ideas below here
-          * ----------------
+          * Generator ideas and examples below here
+          * ---------------------------------------
           */
         // val threeLetters: Gen[Seq[Char]] = Gen.pick(3, 'A' to 'Z')
         val genAlphaStream = Gen.containerOf[Stream,String](Gen.alphaStr)
@@ -56,18 +57,22 @@ object QInterpolatorSpec extends Properties("QInterpolatorSpec") {
     // property("Q: basic") = forAll { (s: String) =>
     property("Q: basic") = forAll(GenString.genAlphaStringsLength0To10) { (s: String) =>
         val rez = Q"""$s"""
-        // ===== START DEBUG =====
-        System.err.println(s"[$count] String = \"${s}\""); count = count + 1
-        System.err.println(s"REZ == |$rez|")
-        System.err.println("------------------------")
-        // ===== STOP DEBUG =====
+        // // ===== START DEBUG =====
+        // System.err.println(s"[$count] String = \"${s}\""); count = count + 1
+        // System.err.println(s"REZ == |$rez|")
+        // System.err.println("------------------------")
+        // // ===== STOP DEBUG =====
         if s.trim == "" then
             rez == List()
         else
             // these things should be true for any single non-empty string
-            rez.length == 1 && rez.head == s
+            // rez.length == 1 && rez.head == s.trim
+            rez == Vector(s.trim)
         end if
     }
+
+    //TODO the main use case, multiline strings
+    //TODO test non-ascii characters (i.e., any ISO character)
 
 }
 
